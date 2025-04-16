@@ -65,7 +65,6 @@ This project uses **regression, classification, and resampling methods** to anal
 
 - `STA_141C_Final_Project.pdf` – Full project report
 - `code/` – R scripts for modeling and analysis
-- `figures/` – Visualizations: decision boundaries, feature importances, histograms
 - `README.md` – This summary file
 
 ---
