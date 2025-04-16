@@ -1,0 +1,73 @@
+---
+title: "STA 141C Final Project code"
+author: "Brett Loy"
+date: "2024-03-10"
+output: pdf_document
+---
+
+```{r}
+library(ISLR)
+library(MASS)
+library(caret)
+revenue <- read.csv("/Users/brettloy/Desktop/STA 141C/Datasets/Restaurant_revenue (1).csv")
+head(revenue)
+```
+
+```{r}
+#standardize the data (mean of 0,standard deviation of 1)
+revenue[1:3] <- scale(revenue[1:3])
+revenue[5:8] <- scale(revenue[5:8])
+head(revenue)
+```
+
+## Linear Discriminant Analysis
+```{r}
+
+# Assuming 'revenue' is your data set
+set.seed(1) # For reproducibility
+trainIndex <- sample(1:nrow(revenue), 0.7 *nrow(revenue))
+train_data <- revenue[trainIndex, ]
+test_data <- revenue[-trainIndex, ]
+
+lda_model <- lda(Cuisine_Type ~ Monthly_Revenue + Number_of_Customers + Menu_Price + Marketing_Spend + Average_Customer_Spending + Promotions + Reviews, data = train_data)
+lda_model
+
+predicted <- predict(lda_model, data = test_data)
+#head(predicted$x)
+
+#percentage of observations the LDA Model correctly predicted 
+mean(predicted$class == test_data$Cuisine_Type)
+
+lda_plot <- cbind(train_data, predict(lda_model)$x)
+
+#create plot
+ggplot(lda_plot, aes(LD1, LD2)) +
+  geom_point(aes(color = Cuisine_Type))
+
+```
+
+
+## Quadratic Discriminant Analysis
+```{r}
+# Assuming 'revenue' is your data set
+set.seed(1) # For reproducibility
+trainIndex <- sample(1:nrow(revenue), 0.7 *nrow(revenue))
+train_data <- revenue[trainIndex, ]
+test_data <- revenue[-trainIndex, ]
+
+qda_model <- qda(Cuisine_Type ~ Monthly_Revenue + Number_of_Customers + Menu_Price + Marketing_Spend + Average_Customer_Spending + Promotions + Reviews, data = train_data)
+#qda_model
+
+predicted <- predict(qda_model, data = test_data)
+#head(predicted$x)
+
+#percentage of observations the LDA Model correctly predicted 
+mean(predicted$class == test_data$Cuisine_Type)
+
+qda_plot <- cbind(train_data, predict(qda_model)$x)
+
+#create plot
+ggplot(qda_plot, aes(LD1, LD2)) +
+  geom_point(aes(color = Cuisine_Type))
+```
+
